@@ -1,4 +1,3 @@
-*.sqlite*
 <?php
 
 namespace Database\Factories;

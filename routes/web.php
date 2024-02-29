@@ -24,39 +24,13 @@ Route::get('/task/{task}', function (Task $task)  {
 })->name('task.show');
     
 // show page
-Route::delete('/task/{task}', fun<?php
-
-use Illuminate\Support\Facades\Route;
-use App\Models\Task;
-use Illuminate\Http\Request;
-
-// root 
-Route::get('/', function () {
-    return redirect()->route('task.index');
-});
-
-// index page
-Route::get('/task', function ()  {
-    return view('index', ['tasks' => Task::latest()->paginate(5)]);
-})->name('task.index');
-
-// create page
-Route::view('/task/create', 'create')
-      ->name('task.create');
-
-// show page
-Route::get('/task/{task}', function (Task $task)  {
-    return view('show', ['task' => $task]);
-})->name('task.show');
-    
-// show page
 Route::delete('/task/{task}', function (Task $task)  {
 
     $task->delete();
 
-    return redirect()->route("task.index")
-    ->with("success","Successfully deleted !");
+    flash('Successfully deleted!')->success()->important();
 
+    return redirect()->route("task.index");
 })->name('task.destroy');
 
 // show page
@@ -80,10 +54,9 @@ Route::post('/task', function(Request $request) {
     $task->description = $data['description'];
     $task->long_description = $data['long_description']; 
     $task->save();
+    flash('Successfully updated!')->success()->important();
 
-    return redirect()->route('task.show', [$task->id])
-            ->with('success','Successfully submitted !');
-
+    return redirect()->route('task.show', [$task->id]);
 })->name('task.store');
 
 
@@ -100,6 +73,7 @@ Route::put('/task/{task}', function(Task $task ,Request $request) {
     $task->description = $data['description'];
     $task->long_description = $data['long_description']; 
     $task->save();
+    flash('Successfully submitted!')->success()->important();
 
     return redirect()->route('task.show', $task)
             ->with('success','Successfully updated !');
